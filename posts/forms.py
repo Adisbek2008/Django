@@ -1,5 +1,5 @@
 from django import forms
-from posts.models import Post
+from posts.models import Category, Post, Tag
 
 # Вариант №1
 class PostForm(forms.Form):
@@ -27,3 +27,18 @@ class CreateForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'image', 'content']
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField(required=False)
+    category_id = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)
+    tags = forms.ModelChoiceField(queryset=Tag.objects.all(), required=False)
+    orderigs = (
+        ("rate", "Rate"), 
+        ("-rate", "Rate (desc)"),
+        ("created_at", "Created_at"),
+        ("-created_at", "Created_at (desc)"),
+        (None, None)
+    )
+
+    ordering = forms.ChoiceField(choices=orderigs, required=False)
